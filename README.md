@@ -1,5 +1,5 @@
 # external-links-modified
-This is a modified version of the <a href="https://www.drupal.org/project/extlink_extra">External Links Extra</a>. Custom messages for custom selectors have been implemented.
+This is a modified version of the <a href="https://www.drupal.org/project/extlink_extra" target="_blank">External Links Extra</a>. Custom messages for custom selectors have been implemented.
 
   //  COLORBOX MODULE IS NEEDED!!!!!!  //
   
