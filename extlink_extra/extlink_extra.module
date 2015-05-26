@@ -9,7 +9,7 @@ define('EXTLINK_EXTRA_508_TEXT', ' [external link]'); // The default space is in
 /* CUSTOM IMPLEMENTATION WARNINGS */
 
 /**
-* Custom messages for custom selector implementation bugs
+* Custom messages for custom selector known implementation bugs
 *
 * *Creating several exceptions and then deleting them will cause several notices of undefined index, as the default form submit handler 
 *  is always executed and the fields are saved to the database.
