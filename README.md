@@ -11,4 +11,6 @@ Usage:
 4 - Open the fieldset 'Add new warning texts' <br>
 5 - Fill in the first field with the selector you want <br>
 6 - Fill in the textarea with the message you want for that selector. <br>
+<br><br>
+Note: The parts modified by me have been wrapped with /*Coded by Shigaki*/
 
