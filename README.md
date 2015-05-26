@@ -13,4 +13,5 @@ Usage:
 6 - Fill in the textarea with the message you want for that selector. <br>
 <br><br>
 Note: The parts modified by me have been wrapped with /*Coded by Shigaki*/
+Note2: Known bugs list have been added to the top of the extlink_extra.module file.
 
