@@ -5,10 +5,10 @@ This is a modified version of the <a href="https://www.drupal.org/project/extlin
   
 Usage:
 
-1 - Access /admin/config/user-interface/extlink
-2 - Select 'Warn using a modal dialog (colorbox)' in the field 'When external links are clicked'
-3 - Select 'Yes' in the field 'Activate custom messages for external links.'
-4 - Open the fieldset 'Add new warning texts'
-5 - Fill in the first field with the selector you want
-6 - Fill in the textarea with the message you want for that selector.
+1 - Access /admin/config/user-interface/extlink <br>
+2 - Select 'Warn using a modal dialog (colorbox)' in the field 'When external links are clicked' <br>
+3 - Select 'Yes' in the field 'Activate custom messages for external links.' <br>
+4 - Open the fieldset 'Add new warning texts' <br>
+5 - Fill in the first field with the selector you want <br>
+6 - Fill in the textarea with the message you want for that selector. <br>
 
