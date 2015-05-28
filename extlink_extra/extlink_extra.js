@@ -176,6 +176,7 @@ Drupal.behaviors.extlink_extra = {
             for (var i = 0; i < Drupal.settings.extlink_extra.extlink_exceptions_list.length; i++){  //This for will check the array of exceptions so I can check if the current page have a certain selector
               if ($(document).has(Drupal.settings.extlink_extra.extlink_exceptions_list[i].title).length > 0){  //If there is one or more exceptions in the list.
                 if ($(Drupal.settings.extlink_extra.extlink_exceptions_list[i].title).has(e.currentTarget).length > 0){   //If the current page have this selector.
+                  alert(window);
                     if (typeof Drupal.settings.extlink_extra.extlink_exceptions_list[i].go_callback !== 'undefined' && $.isFunction(window[Drupal.settings.extlink_extra.extlink_exceptions_list[i].go_callback])){
                       goCallback = true;
                     }
