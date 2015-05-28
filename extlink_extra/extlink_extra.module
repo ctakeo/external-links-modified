@@ -43,6 +43,8 @@ function extlink_extra_page_build() {
     foreach ( $exceptions_array as $exception ) {
       $options[] = array('title'=> $exception->title,
                           'text' => $exception->text,
+                          'cancel_callback' => $exception->cancel_callback,
+                          'go_callback' => $exception->go_callback,
                         );
     }
   }
@@ -236,6 +238,16 @@ function extlink_extra_form_extlink_admin_settings_alter(&$form, &$form_state) {
         '#default_value' => $exception->text,
         '#rows' => 16,
       );
+      $form['extlink_add_exception_fieldset']['exception_fieldset' . $i]['cancel_callback' . $i] = array(
+      '#type' => 'textfield',
+      '#default_value' => $exception->cancel_callback,
+      '#title' => 'Cancel button ' . $i . ' callback function name',
+      );
+      $form['extlink_add_exception_fieldset']['exception_fieldset' . $i]['go_callback' . $i] = array(
+      '#type' => 'textfield',
+      '#default_value' => $exception->go_callback,
+      '#title' => 'Go button ' . $i . ' callback function name',
+      );
       $form['extlink_add_exception_fieldset']['exception_fieldset' . $i]['delete_button' . $i] = array(
         '#type' => 'submit',
         '#title' => 'Text',
@@ -262,6 +274,16 @@ function extlink_extra_form_extlink_admin_settings_alter(&$form, &$form_state) {
       '#default_value' => '',
       '#rows' => 16,
     );
+    $form['extlink_add_exception_fieldset']['exception_fieldset' . $i]['cancel_callback' . $i] = array(
+      '#type' => 'textfield',
+      '#default_value' => '',
+      '#title' => 'Cancel button ' . $i . ' callback function name',
+      );
+      $form['extlink_add_exception_fieldset']['exception_fieldset' . $i]['go_callback' . $i] = array(
+      '#type' => 'textfield',
+      '#default_value' => '',
+      '#title' => 'Go button ' . $i . ' callback function name',
+    );
   } else {
     $form['extlink_add_exception_fieldset']['exception_fieldset' . $i] = array(
       '#type' => 'fieldset',
@@ -279,6 +301,16 @@ function extlink_extra_form_extlink_admin_settings_alter(&$form, &$form_state) {
       '#title' => 'Exception ' . $i . ' Custom message',
       '#default_value' => '',
       '#rows' => 16,
+    );
+    $form['extlink_add_exception_fieldset']['exception_fieldset' . $i]['cancel_callback' . $i] = array(
+      '#type' => 'textfield',
+      '#default_value' => '',
+      '#title' => 'Cancel button ' . $i . ' callback function name',
+      );
+      $form['extlink_add_exception_fieldset']['exception_fieldset' . $i]['go_callback' . $i] = array(
+      '#type' => 'textfield',
+      '#default_value' => '',
+      '#title' => 'Go button ' . $i . ' callback function name',
     );
   }
   //The delete handler will always be executed but will only delete a registry under certain circunstances (i.e.: click the delete exception button or saving with the Exception X selector field blank)
@@ -513,6 +545,8 @@ function extlink_extra_form_validate($form, &$form_state){
   while ($title != NULL) {
     //Add the exception to an array so I can save to the database in one place.
     $excep = new exception();
+    @$excep->cancel_callback = $form['extlink_add_exception_fieldset']['exception_fieldset' . $i]['cancel_callback' . $i]['#value'];
+    @$excep->go_callback = $form['extlink_add_exception_fieldset']['exception_fieldset' . $i]['go_callback' . $i]['#value'];
     @$excep->title = $form['extlink_add_exception_fieldset']['exception_fieldset' . $i]['exception_id' . $i]['#value'];
     @$excep->text = $form['extlink_add_exception_fieldset']['exception_fieldset' . $i]['exception_text' . $i]['#value'];
     $exceptions_array[] = $excep;
