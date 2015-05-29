@@ -167,7 +167,7 @@ Drupal.behaviors.extlink_extra = {
         $.colorbox({
           className: "extlink-extra-leaving-colorbox",
           height: "50%",
-          href: Drupal.settings.extlink_extra.extlink_alert_url+ ".extlink-extra-leaving",
+          href: Drupal.settings.extlink_extra.extlink_alert_url+ " .extlink-extra-leaving",
           initialHeight: "50%",
           initialWidth: "50%",
           onComplete: function (){
@@ -231,7 +231,7 @@ Drupal.behaviors.extlink_extra = {
         $.colorbox({
           className: "extlink-extra-leaving-colorbox",
           height: "50%",
-          href: Drupal.settings.extlink_extra.extlink_alert_url+ ".extlink-extra-leaving",
+          href: Drupal.settings.extlink_extra.extlink_alert_url+ " .extlink-extra-leaving",
           initialHeight: "50%",
           initialWidth: "50%",
           onComplete: function (){   //This one will get the text written inside the 'Warning Text' fieldset.
