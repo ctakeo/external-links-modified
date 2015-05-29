@@ -160,9 +160,20 @@ Drupal.behaviors.extlink_extra = {
 
 
     /*Coded by Shigaki*/
+    var isCurrentCustom = false;
+    for (var i = 0; i < Drupal.settings.extlink_extra.extlink_exceptions_list.length; i++){  //This for will check the array of exceptions so I can check if the current page have a certain selector
+      if ($(document).has(Drupal.settings.extlink_extra.extlink_exceptions_list[i].title).length > 0){  //If there is one or more exceptions in the list.
+        if ($(Drupal.settings.extlink_extra.extlink_exceptions_list[i].title).has(e.currentTarget).length > 0){   //If the current page have this selector.
+          isCurrentCustom = true;
+        }      
+      }
+    }
+
+
+
     /*Checks if the clicked link is inside a selector defined in the module configuration. If it is, make the colorbox display a message specified in the module*/
     if (Drupal.settings.extlink_extra.extlink_alert_type == 'colorbox') {
-      if (Drupal.settings.extlink_extra.extlink_exceptions == 'yes'){ //If the user selected he wants a custom message
+      if (isCurrentCustom){ //If the user selected he wants a custom message
         //Create a colorbox
         $.colorbox({
           className: "extlink-extra-leaving-colorbox",
@@ -235,62 +246,17 @@ Drupal.behaviors.extlink_extra = {
           initialHeight: "50%",
           initialWidth: "50%",
           onComplete: function (){   //This one will get the text written inside the 'Warning Text' fieldset.
-          var goCallback = false;
-          var cancelCallback = false;
-          var teste = '[extlink:back-url]';
-          teste.replace(/\[extlink:back-url\]/gi, external_url);
-          Drupal.settings.extlink.extAlertText.value = Drupal.settings.extlink.extAlertText.value.replace(/\[extlink:external\-url\]/gi, external_url).replace(/\[extlink:back-url\]/gi, back_url);
-         //Drupal.settings.extlink.extAlertText.value;
-          for (var i = 0; i < Drupal.settings.extlink_extra.extlink_exceptions_list.length; i++){  //This for will check the array of exceptions so I can check if the current page have a certain selector
-              if ($(document).has(Drupal.settings.extlink_extra.extlink_exceptions_list[i].title).length > 0){  //If there is one or more exceptions in the list.
-                if ($(Drupal.settings.extlink_extra.extlink_exceptions_list[i].title).has(e.currentTarget).length > 0){   //If the current page have this selector.
-                  if (typeof Drupal.settings.extlink_extra.extlink_exceptions_list[i].go_callback !== 'undefined' && $.isFunction(window[Drupal.settings.extlink_extra.extlink_exceptions_list[i].go_callback])){
-                    goCallback = true;
-                  }
-                  if (typeof Drupal.settings.extlink_extra.extlink_exceptions_list[i].cancel_callback !== 'undefined' && $.isFunction(window[Drupal.settings.extlink_extra.extlink_exceptions_list[i].cancel_callback])){
-                    cancelCallback = true;
-                  }
-                  if (goCallback && cancelCallback){
-                    $('.extlink-extra-leaving').html(Drupal.settings.extlink.extAlertText.value + '<div style="vertical-align:bottom; color:red; height:100%">'+
-                                                                                                                        '<div style="width:50%; float:left;">'+
-                                                                                                                          '<button value="Back" style="float:right; margin-right: 10px;" onclick="'+Drupal.settings.extlink_extra.extlink_exceptions_list[i].cancel_callback+'(); redirect(\'back\',\''+back_url+'\');">Back</button>'+
-                                                                                                                        '</div>'+
-                                                                                                                        '<div style="width:50%; float:right;">'+
-                                                                                                                          '<button value="Go" style="float:left; margin-left:10px;" onclick="'+Drupal.settings.extlink_extra.extlink_exceptions_list[i].go_callback+'(); redirect(\'go\',\''+external_url+'\');">Go</button>'+
-                                                                                                                        '</div>'+
-                                                                                                                      '</div>');
-                  } else if (goCallback) {
-                    $('.extlink-extra-leaving').html(Drupal.settings.extlink.extAlertText.value + '<div style="vertical-align:bottom; color:red; height:100%">'+
-                                                                                                                          '<div style="width:50%; float:left;">'+
-                                                                                                                            '<button value="Back" style="float:right; margin-right: 10px;" onclick="redirect(\'back\', '+back_url+');">Back</button>'+
-                                                                                                                          '</div>'+
-                                                                                                                          '<div style="width:50%; float:right;">'+
-                                                                                                                            '<button value="Go" style="float:left; margin-left:10px;" onclick="'+Drupal.settings.extlink_extra.extlink_exceptions_list[i].go_callback+'(); redirect(\'go\',\''+external_url+'\');">Go</button>'+
-                                                                                                                          '</div>'+
-                                                                                                                        '</div>');
-                  } else if (cancelCallback) {
-                    $('.extlink-extra-leaving').html(Drupal.settings.extlink.extAlertText.value + '<div style="vertical-align:bottom; color:red; height:100%">'+
-                                                                                                                          '<div style="width:50%; float:left;">'+
-                                                                                                                            '<button value="Back" style="float:right; margin-right: 10px;" onclick="'+Drupal.settings.extlink_extra.extlink_exceptions_list[i].cancel_callback+'(); redirect(\'back\',\''+back_url+'\');">Back</button>'+
-                                                                                                                          '</div>'+
-                                                                                                                          '<div style="width:50%; float:right;">'+
-                                                                                                                            '<button value="Go" style="float:left; margin-left:10px;" onclick="redirect(\'go\',\''+external_url+'\');">Go</button>'+
-                                                                                                                          '</div>'+
-                                                                                                                        '</div>');
-                  } else {
-                    $('.extlink-extra-leaving').html(Drupal.settings.extlink.extAlertText.value + '<div style="vertical-align:bottom; color:red; height:100%">'+
-                                                                                                                          '<div style="width:50%; float:left;">'+
-                                                                                                                            '<button value="Back" style="float:right; margin-right: 10px;" onclick="redirect(\'back\',\''+back_url+'\');">Back</button>'+
-                                                                                                                          '</div>'+
-                                                                                                                          '<div style="width:50%; float:right;">'+
-                                                                                                                            '<button value="Go" style="float:left; margin-left:10px;" onclick="redirect(\'go\',\''+external_url+'\');">Go</button>'+
-                                                                                                                          '</div>'+
-                                                                                                                        '</div>');
-                  }
-                  //$('.extlink-extra-leaving').html(Drupal.settings.extlink.extAlertText.value + '<div style="vertical-align:bottom; color:red; height:100%"><div style="width:50%; float:left;"><button value="Back" style="float:right; margin-right: 10px;" onclick="jQuery.colorbox.close();">Back</button></div><div style="width:50%; float:right;"><button value="Go" style="float:left; margin-left:10px;" onclick="window.location = \''+Drupal.settings.extlink_extra.extlink_url_params['external_url']+'\';">Go</button></div></div>');
-                }
-              }
-            }
+            var goCallback = false;
+            var cancelCallback = false;
+            Drupal.settings.extlink.extAlertText.value = Drupal.settings.extlink.extAlertText.value.replace(/\[extlink:external\-url\]/gi, external_url).replace(/\[extlink:back-url\]/gi, back_url);
+            $('.extlink-extra-leaving').html(Drupal.settings.extlink.extAlertText.value + '<div style="vertical-align:bottom; color:red; height:100%">'+
+                                                                                                      '<div style="width:50%; float:left;">'+
+                                                                                                        '<button value="Back" style="float:right; margin-right: 10px;" onclick="jQuery.colorbox.close();">Back</button>'+
+                                                                                                      '</div>'+
+                                                                                                      '<div style="width:50%; float:right;">'+
+                                                                                                        '<button value="Go" style="float:left; margin-left:10px;" onclick="window.location = \''+Drupal.settings.extlink_extra.extlink_url_params['external_url']+'\';">Go</button>'+
+                                                                                                      '</div>'+
+                                                                                                    '</div>');
           },
           width: "50%",
         });
