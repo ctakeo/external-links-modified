@@ -235,6 +235,8 @@ Drupal.behaviors.extlink_extra = {
           initialHeight: "50%",
           initialWidth: "50%",
           onComplete: function (){   //This one will get the text written inside the 'Warning Text' fieldset.
+          var goCallback = false;
+          var cancelCallback = false;
           for (var i = 0; i < Drupal.settings.extlink_extra.extlink_exceptions_list.length; i++){  //This for will check the array of exceptions so I can check if the current page have a certain selector
               if ($(document).has(Drupal.settings.extlink_extra.extlink_exceptions_list[i].title).length > 0){  //If there is one or more exceptions in the list.
                 if ($(Drupal.settings.extlink_extra.extlink_exceptions_list[i].title).has(e.currentTarget).length > 0){   //If the current page have this selector.
