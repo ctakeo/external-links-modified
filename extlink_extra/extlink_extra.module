@@ -41,7 +41,7 @@ function extlink_extra_page_build() {
   $options = array();
   if ($exceptions_array != NULL) {
     foreach ( $exceptions_array as $exception ) {
-      $options[] = array('title'=> $exception->title,
+      $options[] = array('title' => $exception->title,
                           'text' => $exception->text,
                           'cancel_callback' => $exception->cancel_callback,
                           'go_callback' => $exception->go_callback,
@@ -247,6 +247,7 @@ function extlink_extra_form_extlink_admin_settings_alter(&$form, &$form_state) {
       '#type' => 'textfield',
       '#default_value' => $exception->go_callback,
       '#title' => 'Go button ' . $i . ' callback function name',
+      '#description' => t('Add a function name without the parenthesis to act as a click callback to the buttons. Leave it blank to add no callback.'),
       );
       $form['extlink_add_exception_fieldset']['exception_fieldset' . $i]['delete_button' . $i] = array(
         '#type' => 'submit',
@@ -283,6 +284,7 @@ function extlink_extra_form_extlink_admin_settings_alter(&$form, &$form_state) {
       '#type' => 'textfield',
       '#default_value' => '',
       '#title' => 'Go button ' . $i . ' callback function name',
+      '#description' => t('Add a function name without the parenthesis to act as a click callback to the buttons. Leave it blank to add no callback.'),
     );
   } else {
     $form['extlink_add_exception_fieldset']['exception_fieldset' . $i] = array(
@@ -311,12 +313,12 @@ function extlink_extra_form_extlink_admin_settings_alter(&$form, &$form_state) {
       '#type' => 'textfield',
       '#default_value' => '',
       '#title' => 'Go button ' . $i . ' callback function name',
+      '#description' => t('Add a function name without the parenthesis to act as a click callback to the buttons. Leave it blank to add no callback.'),
     );
   }
   //The delete handler will always be executed but will only delete a registry under certain circunstances (i.e.: click the delete exception button or saving with the Exception X selector field blank)
   $form['#submit'][] = 'extlink_extra_exception_delete';
   $form['#validate'][] = 'extlink_extra_form_validate';
-  dsm($form);
   /*Dinamycally creates the selector and message fields*/
 
   //Add the Save Exceptions button 
@@ -325,7 +327,6 @@ function extlink_extra_form_extlink_admin_settings_alter(&$form, &$form_state) {
     '#title' => 'Text',
     '#description' => 'adasd',
     '#value' => 'Save Exceptions',
-    //'#validate' => array('extlink_extra_form_extlink_admin_settings_validate'),
   );
   /*Coded by Shigaki*/
 
@@ -531,7 +532,7 @@ function extlink_extra_timer_markup() {
 }
 
 
-function extlink_extra_form_validate($form, &$form_state){
+function extlink_extra_form_validate($form, &$form_state) {
   /*Coded by Shigaki*/
 
   /*Not sure if this could be added to the validate method in the extra module.*/
