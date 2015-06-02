@@ -126,7 +126,7 @@ Drupal.behaviors.extlink_extra = {
     if (isInExtraLeavingContainer(this)) {
       return true;
     }
-    
+
     var external_url = jQuery(this).attr('href');
     var back_url = window.location.href;
     var alerturl = Drupal.settings.extlink_extra.extlink_alert_url;
@@ -160,17 +160,19 @@ Drupal.behaviors.extlink_extra = {
 
 
     /*Coded by Shigaki*/
-    var isCurrentCustom = false;
-    for (var i = 0; i < Drupal.settings.extlink_extra.extlink_exceptions_list.length; i++){  //This for will check the array of exceptions so I can check if the current page have a certain selector
-      if ($(document).has(Drupal.settings.extlink_extra.extlink_exceptions_list[i].title).length > 0){  //If there is one or more exceptions in the list.
-        if ($(Drupal.settings.extlink_extra.extlink_exceptions_list[i].title).has(e.currentTarget).length > 0){   //If the current page have this selector.
-          isCurrentCustom = true;
-        }      
+    if (Drupal.settings.extlink_extra.extlink_exceptions == 'yes'){
+      var isCurrentCustom = false;
+      for (var i = 0; i < Drupal.settings.extlink_extra.extlink_exceptions_list.length; i++){  //This for will check the array of exceptions so I can check if the current page have a certain selector
+        if ($(document).has(Drupal.settings.extlink_extra.extlink_exceptions_list[i].title).length > 0){  //If there is one or more exceptions in the list.
+          if ($(Drupal.settings.extlink_extra.extlink_exceptions_list[i].title).has(e.currentTarget).length > 0){   //If the current page have this selector.
+            isCurrentCustom = true;
+          }      
+        }
       }
     }
 
 
-
+    if (true){
     /*Checks if the clicked link is inside a selector defined in the module configuration. If it is, make the colorbox display a message specified in the module*/
     if (Drupal.settings.extlink_extra.extlink_alert_type == 'colorbox') {
       if (isCurrentCustom){ //If the user selected he wants a custom message
@@ -261,13 +263,126 @@ Drupal.behaviors.extlink_extra = {
           width: "50%",
         });
       }
-      /*Coded by Shigaki*/
-
       return false;
     }
 
 
+    if (Drupal.settings.extlink_extra.extlink_alert_type == 'bootstrap') {
+      var goCallback = false;
+      var cancelCallback = false;
+      var goMethodName = '';
+      var cancelMethodName = '';
+      var isCurrentCustom = false;
+      var windowRef = window;
+      if (Drupal.settings.extlink_extra.extlink_exceptions == 'yes'){
+        for (var i = 0; i < Drupal.settings.extlink_extra.extlink_exceptions_list.length; i++){  //This for will check the array of exceptions so I can check if the current page have a certain selector
+          if ($(document).has(Drupal.settings.extlink_extra.extlink_exceptions_list[i].title).length > 0){  //If there is one or more exceptions in the list.
+            if ($(Drupal.settings.extlink_extra.extlink_exceptions_list[i].title).has(e.currentTarget).length > 0){   //If the current page have this selector.
+              isCurrentCustom = true;
+            }      
+          }
+        }
+      }
 
+      if (isCurrentCustom){
+        for (var i = 0; i < Drupal.settings.extlink_extra.extlink_exceptions_list.length; i++){  //This for will check the array of exceptions so I can check if the current page have a certain selector
+          if ($(document).has(Drupal.settings.extlink_extra.extlink_exceptions_list[i].title).length > 0){  //If there is one or more exceptions in the list.
+            if ($(Drupal.settings.extlink_extra.extlink_exceptions_list[i].title).has(e.currentTarget).length > 0){   //If the current page have this selector.
+              if (typeof Drupal.settings.extlink_extra.extlink_exceptions_list[i].go_callback !== 'undefined' && $.isFunction(window[Drupal.settings.extlink_extra.extlink_exceptions_list[i].go_callback])){
+                goCallback = true;
+                goMethodName = Drupal.settings.extlink_extra.extlink_exceptions_list[i].go_callback;
+              }
+              if (typeof Drupal.settings.extlink_extra.extlink_exceptions_list[i].cancel_callback !== 'undefined' && $.isFunction(window[Drupal.settings.extlink_extra.extlink_exceptions_list[i].cancel_callback])){
+                cancelCallback = true;
+                cancelMethodName = Drupal.settings.extlink_extra.extlink_exceptions_list[i].cancel_callback;
+              }
+              if (goCallback && cancelCallback){
+                $('#myModal .modal-body').html(Drupal.settings.extlink_extra.extlink_exceptions_list[i].text);
+
+                $('#myModal #modal-close-button').off();
+                $('#myModal #modal-go-button').off();
+
+                $('#myModal #modal-go-button').on('click', function(){
+                  windowRef[goMethodName]();
+                  redirect('go', external_url);
+                });
+                $('#myModal #modal-close-button').on('click', function(){
+                  windowRef[cancelMethodName]();
+                });
+              } else if (goCallback) {
+                $('#myModal .modal-body').html(Drupal.settings.extlink_extra.extlink_exceptions_list[i].text);
+                $('#myModal #modal-close-button').off();
+                $('#myModal #modal-go-button').off();
+
+                $('#myModal #modal-go-button').on('click', function(){
+                  windowRef[goMethodName]();
+                  redirect('go', external_url);
+                });
+
+              } else if (cancelCallback) {
+                $('#myModal .modal-body').html(Drupal.settings.extlink_extra.extlink_exceptions_list[i].text);
+                $('#myModal #modal-close-button').off();
+                $('#myModal #modal-go-button').off();
+
+                $('#myModal #modal-go-button').on('click', function(){
+                  redirect('go', external_url);
+                });
+
+                $('#myModal #modal-close-button').on('click', function(){
+                  windowRef[cancelMethodName]();
+                });
+              } else {
+                $('#myModal .modal-body').html(Drupal.settings.extlink_extra.extlink_exceptions_list[i].text);
+                $('#myModal #modal-close-button').off();
+                $('#myModal #modal-go-button').off();
+
+                $('#myModal #modal-go-button').on('click', function(){
+                  redirect('go', external_url);
+                });
+              }
+            }
+          }
+        }
+      } else {
+        $('#myModal .modal-body').html(Drupal.settings.extlink.extAlertText.value);
+        $('#myModal #modal-close-button').off();
+        $('#myModal #modal-go-button').off();
+        $('#myModal #modal-go-button').on('click', function(){
+                  redirect('go', external_url);
+        });
+      }
+      
+
+
+      /*$('.extlink-extra-leaving').html('<div class="modal" id="myModal">'+
+        '<div class="modal-dialog">'+
+            '<div class="modal-content">'+
+              '<div class="modal-header">'+
+                '<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>'+
+                '<h4 class="modal-title">Modal title</h4>'+
+             ' </div><div class="container"></div>'+
+             ' <div class="modal-body">'+
+                'Content for the dialog / modal goes here.'+
+                '<br>'+
+                '<br>'+
+                '<br>'+
+                '<br>'+
+                '<br>'+
+                '<a data-toggle="modal" href="#myModal2" class="btn btn-primary">Launch modal</a>'+
+              '</div>'+
+              '<div class="modal-footer">'+
+                '<a href="#" data-dismiss="modal" class="btn">Close</a>'+
+                '<a href="#" class="btn btn-primary">Save changes</a>'+
+             ' </div>'+
+            '</div>'+
+          '</div>'+
+      '</div>');*/
+      $("#myModal").modal('show');
+    }
+
+  }
+
+    /*Coded by Shigaki*/
 
     if (Drupal.settings.extlink_extra.extlink_alert_type == 'page') {
       // If we're here, alert text is on but pop-up is off; we should redirect to an intermediate confirm page.
@@ -351,6 +466,62 @@ Drupal.behaviors.extlink_extra = {
         }
       });
     }
+
+    if (Drupal.settings.extlink_extra.extlink_alert_type == 'bootstrap') {
+      // Go through each <a> tag with an 'ext' class,*/
+      $.each($("a.ext"), function(index, value) {
+        $(this).attr('data-toggle', 'modal');
+      });
+      var customModal = '<div class="modal" id="myModal">'+
+        '<div class="modal-dialog">'+
+            '<div class="modal-content">'+
+              '<div class="modal-header">'+
+                '<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>'+
+                '<h4 class="modal-title">You\'re leaving the site</h4>'+
+             '</div><div class="container"></div>'+
+             '<div class="modal-body">'+
+                'Content for the dialog / modal goes here.'+
+                '<br>'+
+                '<br>'+
+                '<br>'+
+                '<br>'+
+                '<br>'+
+              '</div>'+
+              '<div class="modal-footer">'+
+                '<button data-dismiss="modal" id="modal-close-button" class="btn">Close</button>'+
+                '<button id="modal-go-button" class="btn btn-primary">Go</button>'+
+             ' </div>'+
+            '</div>'+
+          '</div>'+
+      '</div>';
+
+
+    $('body').append(customModal);
+      /*$('.extlink-extra-leaving').html('<div class="modal" id="myModal">'+
+        '<div class="modal-dialog">'+
+            '<div class="modal-content">'+
+              '<div class="modal-header">'+
+                '<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>'+
+                '<h4 class="modal-title">Modal title</h4>'+
+             ' </div><div class="container"></div>'+
+             ' <div class="modal-body">'+
+                'Content for the dialog / modal goes here.'+
+                '<br>'+
+                '<br>'+
+                '<br>'+
+                '<br>'+
+                '<br>'+
+                '<a data-toggle="modal" href="#myModal2" class="btn btn-primary">Launch modal</a>'+
+              '</div>'+
+              '<div class="modal-footer">'+
+                '<a href="#" data-dismiss="modal" class="btn">Close</a>'+
+                '<a href="#" class="btn btn-primary">Save changes</a>'+
+             ' </div>'+
+            '</div>'+
+          '</div>'+
+      '</div>');*/
+    //}
+    }
   }
 }
 
@@ -386,6 +557,14 @@ function redirect( whatShouldIDo, whereTo ) {
     window.location = whereTo;
   else
     jQuery.colorbox.close();
+}
+
+function cancelAlert(){
+  alert('Cancel alert.');
+}
+
+function goAlert(){
+  alert('Go alert.');
 }
 
 function extlink_stop_timer() {

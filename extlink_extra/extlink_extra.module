@@ -28,7 +28,7 @@ function extlink_extra_page_build() {
   // If we're using colorbox, we'll add js=1 to the url string of the alert page - this causes a premature exit
   // which saves execution time and doesn't render the rest of the page.
   $aQuery = array();
-  if (variable_get('extlink_alert_type', 'colorbox') == 'colorbox') {
+  if (variable_get('extlink_alert_type', 'colorbox') == 'colorbox' || variable_get('extlink_alert_type', 'bootstrap') == 'bootstrap') {
     $aQuery = array('js' => 1);
   }
   
@@ -176,13 +176,16 @@ function extlink_extra_form_extlink_admin_settings_alter(&$form, &$form_state) {
       '' => t('Don\'t display a warning message'),
       'confirm' => t('Warn with a confirmation popup'),
       'page' => t('Warn on a separate page'),
+      'bootstrap' => t('Display warning message in a bootstrap modal.'),
     ),
   );
 
   if (module_exists('colorbox')) {
     $form['extlink_alert_type']['#options']['colorbox'] = t('Warn using a modal dialog (colorbox)');
   }
-
+  /*if (theme_exists('bootstrap')){
+    $form['extlink_alert_type']['#options']['bootstrap'] = t('Display warning message in a bootstrap modal.');
+  }*/
 
 
   /*Coded by Shigaki*/
