@@ -263,6 +263,7 @@ Drupal.behaviors.extlink_extra = {
           width: "50%",
         });
       }
+      
       return false;
     }
 
